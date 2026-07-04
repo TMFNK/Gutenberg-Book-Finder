@@ -5,19 +5,13 @@ export interface Book {
   year: number | null;
   lang: string;
   downloads: number;
-  x: number;
-  y: number;
-  cluster: number;
   mood: string | null;
   themes: string[] | null;
   difficulty: string | null;
   hook: string | null;
+  cover: string | null;
+  summary: string | null;
+  subjects: string[];
+  bookshelves: string[];
   url: string;
-}
-
-export interface Cluster {
-  id: number;
-  label: string;
-  x: number;
-  y: number;
 }
