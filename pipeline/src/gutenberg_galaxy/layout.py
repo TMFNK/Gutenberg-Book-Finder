@@ -18,7 +18,8 @@ def run() -> None:
                    random_state=42).fit_transform(emb)
     xy -= xy.mean(axis=0)
     xy *= 100 / np.abs(xy).max()
-    labels = hdbscan.HDBSCAN(min_cluster_size=8, min_samples=3).fit_predict(xy)
+    labels = hdbscan.HDBSCAN(min_cluster_size=8, min_samples=3,
+                             cluster_selection_method="leaf").fit_predict(xy)
     LAYOUT_JSON.write_text(json.dumps({
         "positions": {str(i): [round(float(x), 3), round(float(y), 3)]
                       for i, (x, y) in zip(ids, xy)},
