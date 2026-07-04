@@ -21,17 +21,20 @@ def parse_label(resp: dict) -> str:
 def label_clusters() -> dict[int, str]:
     ENRICH_DIR.mkdir(parents=True, exist_ok=True)
     out_path = ENRICH_DIR / "cluster_labels.json"
-    if out_path.exists():
-        return {int(k): v for k, v in json.loads(out_path.read_text()).items()}
+    labels = ({int(k): v for k, v in json.loads(out_path.read_text()).items()}
+              if out_path.exists() else {})
     layout = json.loads(LAYOUT_JSON.read_text())
     books = {str(b["id"]): b for b in json.loads(CATALOG_JSON.read_text())}
     members: dict[int, list[str]] = {}
     for bid, c in layout["clusters"].items():
         if c != -1:
             members.setdefault(c, []).append(books[bid]["title"])
-    labels = {c: parse_label(chat_json(cluster_prompt(c, titles)))
-              for c, titles in sorted(members.items())}
-    out_path.write_text(json.dumps(labels))
+    for c, titles in sorted(members.items()):
+        if c in labels:
+            continue
+        labels[c] = chat_json(cluster_prompt(c, titles), validate=parse_label)
+        out_path.write_text(json.dumps(labels))
+        print(f"cluster {c}: {labels[c]}")
     return labels
 
 
@@ -76,8 +79,9 @@ def tag_books() -> None:
         out = tags_dir / f"batch_{n}.json"
         if out.exists():
             continue
-        resp = chat_json(tags_prompt(batch))
-        tags = parse_tags(resp, expected_ids={b["id"] for b in batch})
+        ids = {b["id"] for b in batch}
+        tags = chat_json(tags_prompt(batch),
+                         validate=lambda r, ids=ids: parse_tags(r, ids))
         out.write_text(json.dumps(tags))
         print(f"batch {n} done")
 
