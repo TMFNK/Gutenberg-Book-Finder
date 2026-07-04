@@ -9,12 +9,14 @@ def book_row(book: dict, tags: dict | None) -> dict:
     tags = tags or {}
     authors = book.get("authors") or []
     summaries = book.get("summaries") or []
+    mood = tags.get("mood")
     return {"id": book["id"], "title": book["title"],
             "author": authors[0]["name"] if authors else "Unknown",
             "year": authors[0].get("birth_year") if authors else None,
             "lang": (book.get("languages") or ["?"])[0],
             "downloads": book.get("download_count", 0),
-            "mood": tags.get("mood"), "themes": tags.get("themes"),
+            "mood": mood.strip().lower() if mood else None,
+            "themes": tags.get("themes"),
             "difficulty": tags.get("difficulty"), "hook": tags.get("hook"),
             "cover": (book.get("formats") or {}).get("image/jpeg"),
             "summary": summaries[0] if summaries else None,

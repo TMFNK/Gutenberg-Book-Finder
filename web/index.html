@@ -3,16 +3,40 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gutenberg Galaxy</title>
+    <title>Gutenberg Book Finder</title>
   </head>
-  <body style="margin:0;background:#0a0a14;color:#e8e6df;font-family:Georgia,serif">
-    <div id="map" style="position:fixed;inset:0"></div>
-    <div id="hud" style="position:fixed;top:16px;left:16px;z-index:10">
-      <h1 style="font-size:18px;margin:0">Gutenberg Galaxy</h1>
-      <input id="search" placeholder="Search 1,000 books…"
-        style="margin-top:8px;padding:6px 10px;background:#141428;color:inherit;border:1px solid #333;border-radius:6px;width:220px"/>
+  <body>
+    <header>
+      <h1>Gutenberg Book Finder</h1>
+      <p class="tagline">Find your next free book among Project Gutenberg&rsquo;s 1,000 most loved.</p>
+      <div class="controls">
+        <input id="search" type="search" placeholder="Search title, author, subject&hellip;" />
+        <button id="surprise" type="button">Surprise me</button>
+      </div>
+    </header>
+    <div class="layout">
+      <aside id="filters">
+        <label>Mood <select id="f-mood"></select></label>
+        <label>Difficulty <select id="f-difficulty"></select></label>
+        <label>Theme <select id="f-theme"></select></label>
+        <label>Subject <select id="f-subject"></select></label>
+        <label>Language <select id="f-lang"></select></label>
+        <label>Era <select id="f-era"></select></label>
+        <label>Sort by
+          <select id="f-sort">
+            <option value="downloads">Most downloaded</option>
+            <option value="title">Title A&ndash;Z</option>
+          </select>
+        </label>
+        <button id="clear" type="button">Clear filters</button>
+      </aside>
+      <main>
+        <p id="count"></p>
+        <div id="grid"></div>
+        <p id="error" hidden>Could not load the book data. Please try again later.</p>
+      </main>
     </div>
-    <div id="card" style="display:none;position:fixed;right:16px;top:16px;width:300px;background:#141428ee;border:1px solid #333;border-radius:10px;padding:16px;z-index:10"></div>
+    <div id="detail-backdrop" hidden><div id="detail"></div></div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

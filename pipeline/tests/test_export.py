@@ -9,9 +9,10 @@ def test_book_row_shape():
             "summaries": ["A sailor hunts a whale."],
             "subjects": ["Whaling -- Fiction"],
             "bookshelves": ["Best Books Ever"]}
-    row = book_row(book, {"mood": "dark", "themes": ["obsession"],
+    row = book_row(book, {"mood": "Dark ", "themes": ["obsession"],
                           "difficulty": "hard", "hook": "A whale."})
     assert row["author"] == "Melville, Herman"
+    assert row["mood"] == "dark"
     assert row["cover"] == "https://x.test/pg2701.cover.jpg"
     assert row["summary"] == "A sailor hunts a whale."
     assert row["subjects"] == ["Whaling -- Fiction"]
