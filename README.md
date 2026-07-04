@@ -2,7 +2,7 @@
 
 A whichbook-inspired search & browse interface for free Project Gutenberg books. Search instantly across titles, authors, subjects, and summaries; filter by mood, theme, difficulty, subject, language, and era; or hit "Surprise me". Every book card shows its cover, an LLM-generated hook, and tags, with a detail view linking straight to the free book on gutenberg.org.
 
-**Live site:** https://tmfnk.github.io/Gutenberg-Galaxy/
+**Live site:** https://tmfnk.github.io/Gutenberg-Book-Finder/
 
 Currently covering the 1,000 most-downloaded books on Project Gutenberg (M1). Scaling to the full catalog (~75,000 books) is planned.
 

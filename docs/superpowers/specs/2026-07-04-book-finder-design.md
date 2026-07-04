@@ -9,7 +9,7 @@
 Replace the deck.gl galaxy map with a whichbook.net-inspired search & browse
 interface for the 1,000 most-downloaded Project Gutenberg books. Fully static,
 all search/filtering client-side, hosted on GitHub Pages at the default
-project URL (`https://tmfnk.github.io/Gutenberg-Galaxy/`). No custom domain.
+project URL (`https://tmfnk.github.io/Gutenberg-Book-Finder/`). No custom domain.
 
 ## Scope decisions
 
@@ -64,7 +64,7 @@ Keep the Vite + vanilla TypeScript stack. Remove deck.gl.
 ## Deployment
 
 GitHub Actions workflow: on push to `main`, build `web/` with Vite
-(`base: '/Gutenberg-Galaxy/'`) and deploy to GitHub Pages.
+(`base: '/Gutenberg-Book-Finder/'`) and deploy to GitHub Pages.
 
 ## Testing
 
