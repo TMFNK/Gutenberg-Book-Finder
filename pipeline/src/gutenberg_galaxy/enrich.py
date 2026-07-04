@@ -1,7 +1,7 @@
 import json
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ValidationError
 
 from .openrouter import chat_json
 from .paths import CATALOG_JSON, ENRICH_DIR, EXCERPTS_DIR, LAYOUT_JSON
@@ -50,11 +50,16 @@ def chunk(seq: list, size: int) -> list[list]:
     return [seq[i:i + size] for i in range(0, len(seq), size)]
 
 
-def parse_tags(resp: dict, expected_ids: set[int]) -> dict[int, dict]:
-    tags = {t.id: t.model_dump() for t in (BookTags(**b) for b in resp["books"])}
-    missing = expected_ids - set(tags)
-    if missing:
-        raise ValueError(f"missing ids in LLM response: {missing}")
+def parse_tags(resp: dict) -> dict[int, dict]:
+    tags = {}
+    for b in resp.get("books", []):
+        try:
+            t = BookTags(**b)
+        except ValidationError:
+            continue
+        tags[t.id] = t.model_dump()
+    if not tags:
+        raise ValueError("no valid book tags in response")
     return tags
 
 
@@ -79,9 +84,15 @@ def tag_books() -> None:
         out = tags_dir / f"batch_{n}.json"
         if out.exists():
             continue
-        ids = {b["id"] for b in batch}
-        tags = chat_json(tags_prompt(batch),
-                         validate=lambda r, ids=ids: parse_tags(r, ids))
+        tags: dict[int, dict] = {}
+        remaining = batch
+        for _ in range(3):
+            tags.update(chat_json(tags_prompt(remaining), validate=parse_tags))
+            remaining = [b for b in remaining if b["id"] not in tags]
+            if not remaining:
+                break
+        if remaining:
+            print(f"warning: batch {n} untagged ids: {[b['id'] for b in remaining]}")
         out.write_text(json.dumps(tags))
         print(f"batch {n} done")
 

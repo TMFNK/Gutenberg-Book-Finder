@@ -26,9 +26,14 @@ def test_book_tags_validation():
         BookTags(**{**ok, "difficulty": "impossible"})
 
 
-def test_parse_tags_expects_all_ids():
+def test_parse_tags_keeps_valid_skips_invalid():
     resp = {"books": [{"id": 1, "mood": "dark", "themes": ["x"],
-                       "difficulty": "easy", "hook": "h"}]}
-    assert parse_tags(resp, expected_ids={1})[1]["mood"] == "dark"
+                       "difficulty": "easy", "hook": "h"},
+                      {"id": 2, "mood": "sad"}]}  # invalid: missing fields
+    tags = parse_tags(resp)
+    assert tags[1]["mood"] == "dark" and 2 not in tags
+
+
+def test_parse_tags_raises_when_nothing_valid():
     with pytest.raises(ValueError):
-        parse_tags(resp, expected_ids={1, 2})
+        parse_tags({"books": [{"id": 3}]})
