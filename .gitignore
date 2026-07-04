@@ -1,5 +1,7 @@
-data/
-web/public/data/
+data/*
+!data/catalog.json
+!data/enrich/
+!data/layout.json
 .env
 __pycache__/
 .venv/
