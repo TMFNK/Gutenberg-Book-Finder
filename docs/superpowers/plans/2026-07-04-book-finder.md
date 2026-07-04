@@ -14,7 +14,7 @@
 
 - No new scraping and no new LLM calls — all data comes from existing `data/catalog.json` and `data/enrich/`.
 - Keep vanilla TypeScript; no UI framework.
-- Site must work at `https://tmfnk.github.io/Gutenberg-Galaxy/` (Vite `base: '/Gutenberg-Galaxy/'` for builds) and at `/` in local dev.
+- Site must work at `https://tmfnk.github.io/Gutenberg-Book-Finder/` (Vite `base: '/Gutenberg-Book-Finder/'` for builds) and at `/` in local dev.
 - Commit to repo: `data/catalog.json`, `data/enrich/`, `data/layout.json`, `web/public/data/*.json`. Keep ignoring `data/excerpts/`, `data/embeddings.npy`, `data/embedding_ids.json`.
 - All escaping of book-derived strings into HTML goes through `esc()` from `grid.ts`.
 - Pipeline commands run from `pipeline/`; web commands run from `web/`.
@@ -837,7 +837,7 @@ Create `web/vite.config.ts`:
 import { defineConfig } from 'vite';
 
 export default defineConfig(({ command }) => ({
-  base: command === 'build' ? '/Gutenberg-Galaxy/' : '/',
+  base: command === 'build' ? '/Gutenberg-Book-Finder/' : '/',
 }));
 ```
 
@@ -845,8 +845,8 @@ export default defineConfig(({ command }) => ({
 
 - [ ] **Step 2: Verify the base path lands in the build**
 
-Run: `cd web && npm run build && grep -o '/Gutenberg-Galaxy/assets/[^"]*' dist/index.html | head -1`
-Expected: a `/Gutenberg-Galaxy/assets/index-*.js` path.
+Run: `cd web && npm run build && grep -o '/Gutenberg-Book-Finder/assets/[^"]*' dist/index.html | head -1`
+Expected: a `/Gutenberg-Book-Finder/assets/index-*.js` path.
 
 - [ ] **Step 3: Create the workflow**
 
@@ -899,7 +899,7 @@ jobs:
 In `README.md`: replace the galaxy-map description (lines 1–5 and the frontend paragraph) to describe the book finder, replace the `map.ts`/`search.ts` lines in the project-layout tree with `grid.ts`, `filters.ts`, `search.ts`, `card.ts` one-liners, remove the `clusters.json` mention, and add near the top:
 
 ```markdown
-**Live site:** https://tmfnk.github.io/Gutenberg-Galaxy/
+**Live site:** https://tmfnk.github.io/Gutenberg-Book-Finder/
 ```
 
 - [ ] **Step 5: Commit and push**
@@ -912,9 +912,9 @@ git push origin main
 
 - [ ] **Step 6: Enable Pages and verify the deploy**
 
-GitHub Pages must be set to deploy from Actions once: `gh api -X POST repos/TMFNK/Gutenberg-Galaxy/pages -f build_type=workflow` (if it errors with "already exists", run `gh api -X PUT repos/TMFNK/Gutenberg-Galaxy/pages -f build_type=workflow`).
+GitHub Pages must be set to deploy from Actions once: `gh api -X POST repos/TMFNK/Gutenberg-Book-Finder/pages -f build_type=workflow` (if it errors with "already exists", run `gh api -X PUT repos/TMFNK/Gutenberg-Book-Finder/pages -f build_type=workflow`).
 
-Then: `gh run watch` until the deploy job succeeds, and `curl -sI https://tmfnk.github.io/Gutenberg-Galaxy/ | head -1`
+Then: `gh run watch` until the deploy job succeeds, and `curl -sI https://tmfnk.github.io/Gutenberg-Book-Finder/ | head -1`
 Expected: `HTTP/2 200`. If the very first request 404s, wait a minute for Pages DNS/CDN and retry once.
 
 ---

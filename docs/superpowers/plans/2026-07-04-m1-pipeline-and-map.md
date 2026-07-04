@@ -12,7 +12,7 @@
 
 - Python managed with `uv` inside `pipeline/` (see astral:uv skill); run everything as `uv run ...` from `pipeline/`.
 - Every pipeline stage caches to `data/` (gitignored) and skips work already done — re-running any stage must be safe.
-- All network fetching is polite: ≥0.5s between requests to gutenberg.org, custom User-Agent `gutenberg-galaxy (https://github.com/TMFNK/Gutenberg-Galaxy)`.
+- All network fetching is polite: ≥0.5s between requests to gutenberg.org, custom User-Agent `gutenberg-galaxy (https://github.com/TMFNK/Gutenberg-Book-Finder)`.
 - OpenRouter: model from env `OPENROUTER_MODEL` (default `openai/gpt-oss-120b`), key from env `OPENROUTER_API_KEY`. Never hardcode keys.
 - M1 book count: `N_BOOKS = 1000`.
 - Commit after every task (Conventional Commits style, as in existing history).
@@ -55,7 +55,7 @@ data/               # gitignored cache
 - [ ] **Step 1: Scaffold**
 
 ```bash
-cd /Users/edis-mac/Documents/Gutenberg-Galaxy
+cd /Users/edis-mac/Documents/Gutenberg-Book-Finder
 printf 'data/\nweb/public/data/\n.env\n__pycache__/\n.venv/\nnode_modules/\ndist/\n' > .gitignore
 mkdir -p pipeline && cd pipeline
 uv init --lib --name gutenberg-galaxy --package
@@ -117,7 +117,7 @@ import httpx
 from .paths import CATALOG_JSON
 
 GUTENDEX = "https://gutendex.com/books/"
-UA = {"User-Agent": "gutenberg-galaxy (https://github.com/TMFNK/Gutenberg-Galaxy)"}
+UA = {"User-Agent": "gutenberg-galaxy (https://github.com/TMFNK/Gutenberg-Book-Finder)"}
 
 def fetch_catalog(n: int = 1000) -> list[dict]:
     if CATALOG_JSON.exists():
@@ -368,7 +368,7 @@ URL = "https://openrouter.ai/api/v1/chat/completions"
 def chat_json(prompt: str, max_retries: int = 3):
     model = os.environ.get("OPENROUTER_MODEL", "openai/gpt-oss-120b")
     headers = {"Authorization": f"Bearer {os.environ['OPENROUTER_API_KEY']}",
-               "HTTP-Referer": "https://github.com/TMFNK/Gutenberg-Galaxy",
+               "HTTP-Referer": "https://github.com/TMFNK/Gutenberg-Book-Finder",
                "X-Title": "Gutenberg Galaxy"}
     body = {"model": model,
             "messages": [{"role": "user", "content": prompt}],
@@ -642,7 +642,7 @@ for name, fn in STAGES.items():
 - [ ] **Step 1: Scaffold**
 
 ```bash
-cd /Users/edis-mac/Documents/Gutenberg-Galaxy
+cd /Users/edis-mac/Documents/Gutenberg-Book-Finder
 npm create vite@latest web -- --template vanilla-ts
 cd web && npm install && npm install deck.gl
 ```

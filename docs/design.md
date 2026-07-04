@@ -1,7 +1,7 @@
 # Gutenberg Galaxy — Design Spec
 
 **Date:** 2026-07-04
-**Repo:** https://github.com/TMFNK/Gutenberg-Galaxy
+**Repo:** https://github.com/TMFNK/Gutenberg-Book-Finder
 **Status:** Approved design, pre-implementation
 **Purpose:** Interactive semantic map of all ~75,000 Project Gutenberg books. Portfolio / sales material for [mbitai.com](https://www.mbitai.com) — demonstrates "LLM to classify and map data in an interactive way."
 
