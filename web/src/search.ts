@@ -1,7 +1,7 @@
 import MiniSearch from 'minisearch';
 import type { Book } from './types';
 
-const FIELDS = ['title', 'author', 'subjects', 'themes', 'summary'];
+const FIELDS = ['title', 'author', 'subjects', 'themes', 'summary', 'hook'];
 
 export function buildIndex(books: Book[]): MiniSearch {
   const index = new MiniSearch({

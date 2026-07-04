@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { EMPTY_FILTERS, applyFilters, era, facetOptions, pickRandom, sortBooks } from './filters';
+import { EMPTY_FILTERS, applyFilters, era, facetOptions, pickRandom,
+         shelfLabel, sortBooks } from './filters';
 import type { Book } from './types';
 
 function mk(over: Partial<Book>): Book {
@@ -18,6 +19,13 @@ describe('era', () => {
   });
 });
 
+describe('shelfLabel', () => {
+  it('strips Category prefix', () => {
+    expect(shelfLabel('Category: Novels')).toBe('Novels');
+    expect(shelfLabel('Romance')).toBe('Romance');
+  });
+});
+
 describe('applyFilters', () => {
   const books = [
     mk({ id: 1, mood: 'dark', themes: ['obsession'], difficulty: 'hard' }),
@@ -29,6 +37,16 @@ describe('applyFilters', () => {
   it('filters by mood, theme, era together', () => {
     const hits = applyFilters(books, { ...EMPTY_FILTERS, mood: 'dark', theme: 'obsession', era: '19th century' });
     expect(hits.map((b) => b.id)).toEqual([1]);
+  });
+  it('filters by bookshelf and author', () => {
+    const data = [
+      mk({ id: 1, author: 'Austen, Jane', bookshelves: ['Category: Novels'] }),
+      mk({ id: 2, author: 'Melville, Herman', bookshelves: ['Category: Adventure'] }),
+    ];
+    expect(applyFilters(data, { ...EMPTY_FILTERS, bookshelf: 'Category: Novels' }).map((b) => b.id))
+      .toEqual([1]);
+    expect(applyFilters(data, { ...EMPTY_FILTERS, author: 'Melville, Herman' }).map((b) => b.id))
+      .toEqual([2]);
   });
   it('handles null tag fields', () => {
     expect(applyFilters([mk({ mood: null })], { ...EMPTY_FILTERS, mood: 'dark' })).toHaveLength(0);

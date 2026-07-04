@@ -30,6 +30,11 @@ describe('searchBooks', () => {
   it('finds by summary', () => {
     expect(searchBooks(index, books, 'regency')[0].id).toBe(2);
   });
+  it('finds by hook', () => {
+    const hooked = [mk({ id: 3, hook: 'A whale stalks the sea.' })];
+    const idx = buildIndex(hooked);
+    expect(searchBooks(idx, hooked, 'whale stalks')[0].id).toBe(3);
+  });
   it('returns empty for no match', () => {
     expect(searchBooks(index, books, 'zzzzqqq')).toEqual([]);
   });

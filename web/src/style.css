@@ -86,6 +86,44 @@ button.primary:hover { background: var(--accent-soft); border-color: var(--accen
   border-color: var(--accent); font-weight: 600;
 }
 .recent-chip { max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.shelf-label {
+  margin: 14px 0 6px; font-size: 12px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted);
+}
+.shelf-label:first-of-type { margin-top: 12px; }
+.card-downloads { margin: 0 0 6px; font-size: 11px; color: var(--muted); }
+.author-link {
+  padding: 0; font: inherit; font-size: inherit; color: var(--accent-soft);
+  background: none; border: none; border-radius: 0; min-height: 0;
+  text-decoration: underline; text-underline-offset: 2px; cursor: pointer;
+}
+.author-link:hover { color: var(--accent); border-color: transparent; }
+.author-link:active { transform: none; }
+.similar { margin: 20px 0 0; }
+.similar h3 {
+  font-family: var(--display); font-size: 15px; font-weight: 600;
+  margin: 0 0 10px; color: var(--muted);
+}
+.similar-list { display: flex; flex-direction: column; gap: 8px; }
+.similar-card {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%; min-height: 52px; padding: 8px 10px;
+  text-align: left; background: var(--bg-deep);
+  border: 1px solid var(--border); border-radius: 10px;
+}
+.similar-card img {
+  width: 36px; height: 54px; object-fit: cover;
+  border-radius: 4px; flex-shrink: 0;
+}
+.similar-title {
+  display: block; font-family: var(--display); font-size: 14px;
+  line-height: 1.2; color: var(--text);
+}
+.similar-author { display: block; font-size: 12px; color: var(--muted); }
+.empty-state { color: var(--muted); font-style: italic; }
+.empty-state p { margin: 0 0 12px; font-style: normal; color: var(--text); }
+.empty-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.empty-actions button { font-style: normal; }
 
 .layout { display: flex; gap: 24px; padding: 8px 24px 24px; align-items: flex-start; }
 #filters {

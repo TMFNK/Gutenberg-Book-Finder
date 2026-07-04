@@ -5,14 +5,22 @@ export interface Filters {
   difficulty: string | null;
   theme: string | null;
   subject: string | null;
+  bookshelf: string | null;
+  author: string | null;
   lang: string | null;
   era: string | null;
 }
 
 export const EMPTY_FILTERS: Filters = {
   mood: null, difficulty: null, theme: null,
-  subject: null, lang: null, era: null,
+  subject: null, bookshelf: null, author: null,
+  lang: null, era: null,
 };
+
+/** Strip PG "Category: " prefix for display. */
+export function shelfLabel(s: string): string {
+  return s.startsWith('Category: ') ? s.slice(10) : s;
+}
 
 export function era(year: number | null): string | null {
   if (year == null) return null;
@@ -40,6 +48,8 @@ export function applyFilters(books: Book[], f: Filters): Book[] {
     (!f.difficulty || b.difficulty === f.difficulty) &&
     (!f.theme || (b.themes ?? []).includes(f.theme)) &&
     (!f.subject || b.subjects.includes(f.subject)) &&
+    (!f.bookshelf || b.bookshelves.includes(f.bookshelf)) &&
+    (!f.author || b.author === f.author) &&
     (!f.lang || b.lang === f.lang) &&
     (!f.era || era(b.year) === f.era));
 }
