@@ -1,8 +1,10 @@
-# Gutenberg Galaxy
+# Gutenberg Book Finder
 
-An interactive star-map of Project Gutenberg books. Every book is a star, positioned by semantic similarity; similar books cluster into constellations named by an LLM. Click a star to see an LLM-generated hook, mood, themes, and difficulty, plus a link to read the book free on gutenberg.org.
+A whichbook-inspired search & browse interface for free Project Gutenberg books. Search instantly across titles, authors, subjects, and summaries; filter by mood, theme, difficulty, subject, language, and era; or hit "Surprise me". Every book card shows its cover, an LLM-generated hook, and tags, with a detail view linking straight to the free book on gutenberg.org.
 
-Currently mapping the 1,000 most-downloaded books on Project Gutenberg (M1). Scaling to the full catalog (~75,000 books) is planned.
+**Live site:** https://tmfnk.github.io/Gutenberg-Galaxy/
+
+Currently covering the 1,000 most-downloaded books on Project Gutenberg (M1). Scaling to the full catalog (~75,000 books) is planned.
 
 ## How it works
 
@@ -15,7 +17,9 @@ A Python pipeline builds the map data once, offline:
 5. **Enrich** — an LLM (via [OpenRouter](https://openrouter.ai/)) names each cluster and tags every book with a mood, themes, difficulty, and one-line hook.
 6. **Export** — write compact JSON consumed by the frontend.
 
-The frontend is a static site: Vite + TypeScript + [deck.gl](https://deck.gl/) rendering the books as a zoomable, searchable point map. No server required.
+The scraped metadata (catalog, LLM tags, exported book data) is committed to this repo, so the frontend runs without re-running the pipeline.
+
+The frontend is a static site: Vite + TypeScript, no framework. Search is client-side via [MiniSearch](https://github.com/lucaong/minisearch). No server required; deploys to GitHub Pages on every push to `main`.
 
 ## Project layout
 
@@ -30,11 +34,12 @@ pipeline/   Python data pipeline (uv-managed)
     export.py     writes web/public/data/*.json
     openrouter.py thin OpenRouter chat client
   tests/        pytest suite
-web/        Vite + TypeScript + deck.gl frontend
+web/        Vite + TypeScript frontend
   src/
-    map.ts      deck.gl scatterplot + cluster labels
+    grid.ts     book card grid
+    filters.ts  facet filters, sorting, surprise-me
+    search.ts   MiniSearch full-text search
     card.ts     book detail panel
-    search.ts   fly-to-book search
 docs/       design spec and implementation plan
 ```
 
@@ -59,7 +64,7 @@ npm install
 npm run dev
 ```
 
-Requires `web/public/data/books.json` and `clusters.json`, produced by the `export` pipeline stage.
+Requires `web/public/data/books.json`, produced by the `export` pipeline stage (already committed to the repo).
 
 ## Design & planning docs
 
