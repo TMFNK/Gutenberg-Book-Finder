@@ -57,6 +57,7 @@ async function init() {
   let openBookId: number | null = initial.bookId ?? null;
   let lastFocused: HTMLElement | null = null;
   let fromHistory = false;
+  let detailPushedHistory = false;
 
   const searchInput = document.getElementById('search') as HTMLInputElement;
   const sortSelect = document.getElementById('f-sort') as HTMLSelectElement;
@@ -85,11 +86,17 @@ async function init() {
 
   const closeDetail = () => {
     if (fromHistory) return;
-    if (openBookId != null) history.back();
+    if (openBookId == null) return;
+    if (detailPushedHistory) history.back();
+    else {
+      dismissDetail();
+      syncUrl(false);
+    }
   };
 
   const dismissDetail = () => {
     openBookId = null;
+    detailPushedHistory = false;
     showDetail(null, { returnFocus: lastFocused });
     setPageMeta(null);
   };
@@ -117,7 +124,10 @@ async function init() {
 
   const openDetail = (b: Book, focusEl?: HTMLElement | null) => {
     presentDetail(b, focusEl);
-    if (!fromHistory) syncUrl(true);
+    if (!fromHistory) {
+      syncUrl(true);
+      detailPushedHistory = true;
+    }
   };
 
   const visible = (): Book[] => {

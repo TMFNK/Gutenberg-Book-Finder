@@ -17,8 +17,11 @@ function similarSection(title: string, books: Book[]): string {
     </section>`;
 }
 
+let focusTrapHandler: ((e: KeyboardEvent) => void) | null = null;
+
 function trapFocus(panel: HTMLElement): void {
-  panel.addEventListener('keydown', (e) => {
+  if (focusTrapHandler) panel.removeEventListener('keydown', focusTrapHandler);
+  focusTrapHandler = (e) => {
     if (e.key !== 'Tab') return;
     const nodes = panel.querySelectorAll<HTMLElement>(
       'button, [href], [tabindex]:not([tabindex="-1"])');
@@ -32,7 +35,8 @@ function trapFocus(panel: HTMLElement): void {
       e.preventDefault();
       first.focus();
     }
-  });
+  };
+  panel.addEventListener('keydown', focusTrapHandler);
 }
 
 export interface DetailOpts {
